@@ -40,6 +40,18 @@ public class ProductBasket {
         return total;
     }
 
+    // Метод получения количества специальных товаров
+    public int getSpecialProduct() {
+        int total = 0;
+        for (Product product : basket) {
+            if (product == null || !product.isSpecial()) {
+                continue;
+            }
+            total ++;
+        }
+        return total;
+    }
+
     // Проверка пустой корзины
     private boolean isEmptyBasket() {
         for (Product product : basket) {
@@ -58,10 +70,11 @@ public class ProductBasket {
             System.out.println("Корзина:");
             for (Product product : basket) {
                 if (product != null) {
-                    System.out.println(product.getName() + ": " + product.getPrice() + " руб.");
+                    System.out.println(product);
                 }
             }
             System.out.println("Итого:" + getTotalPrice() + " руб.");
+            System.out.println("Специальных товаров:" + getSpecialProduct() + " руб.");
         }
     }
 
