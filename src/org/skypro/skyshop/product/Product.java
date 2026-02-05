@@ -1,9 +1,10 @@
 package org.skypro.skyshop.product;
 
-import java.util.function.BinaryOperator;
+import org.skypro.skyshop.search.Searchable;
 
-public abstract class Product {
+public abstract class Product implements Searchable {
     private final String name;
+
     public Product(String name) {
         this.name = name;
     }
@@ -18,5 +19,20 @@ public abstract class Product {
     public abstract String toString();
 
     public abstract boolean isSpecial();
+
+    @Override
+    public String getSearchTerm() {
+        return getName();
+    }
+
+    @Override
+    public String getTypeSearchable() {
+        return "PRODUCT";
+    }
+
+    @Override
+    public String getNameSearchable() {
+        return getName();
+    }
 
 }

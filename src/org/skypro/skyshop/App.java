@@ -1,19 +1,53 @@
 package org.skypro.skyshop;
 
+import org.skypro.skyshop.article.Article;
 import org.skypro.skyshop.basket.ProductBasket;
-import org.skypro.skyshop.product.Product;
 import org.skypro.skyshop.product.SimpleProduct;
 import org.skypro.skyshop.product.DiscountedProduct;
 import org.skypro.skyshop.product.FixPriceProduct;
+import org.skypro.skyshop.search.SearchEngine;
 
 public class App {
+    public static FixPriceProduct bread = new FixPriceProduct("хлеб");
+    public static SimpleProduct apple = new SimpleProduct("яблоко", 20);
+    public static DiscountedProduct milk = new DiscountedProduct("молоко", 80, 17);
+    public static DiscountedProduct coffee = new DiscountedProduct("кофе", 300, 42);
+    public static SimpleProduct banana = new SimpleProduct("банан", 30);
+    public static SimpleProduct salt = new SimpleProduct("соль", 50);
+
+    public static Article arBread = new Article("Полезный хлеб", "Подходит к напиткам: кофе, молоко");
+    public static Article arMilk = new Article("Завтрак с молоком", "Смузи -добавьте: банан, яблоко; подавайте к кофе");
+    public static Article arCoffee = new Article("Рецепт кофе", "Добавьте: молоко");
+    public static Article arBanana = new Article("Ищите банан", "Увидите яблоко - где-то рядом банан. Не забудьте молоко");
+    public static Article arApple = new Article("Богатырское яблоко", "Полезнее, чем банан. Для смузи используйте кефир, не молоко");
+
     public static void main(String[] args) {
-        FixPriceProduct bread = new FixPriceProduct("Хлеб");
-        SimpleProduct apple = new SimpleProduct("Яблоко", 20);
-        DiscountedProduct milk = new DiscountedProduct("Молоко", 80, 17);
-        DiscountedProduct coffee = new DiscountedProduct("Кофе", 300, 42);
-        SimpleProduct banana = new SimpleProduct("Банан", 30);
-        SimpleProduct salt = new SimpleProduct("Соль", 50);
+        realizationProductBasket();
+        realizationSearchEngine();
+    }
+
+    private static void realizationSearchEngine() {
+        SearchEngine searchEngine1 = new SearchEngine(9);
+
+        System.out.println("Заполнение листа поиска");
+        searchEngine1.add(bread);
+        searchEngine1.add(coffee);
+        searchEngine1.add(milk);
+        searchEngine1.add(banana);
+        searchEngine1.add(arBread);
+        searchEngine1.add(arMilk);
+        searchEngine1.add(arCoffee);
+        searchEngine1.add(arBanana);
+        searchEngine1.add(arApple);
+        searchEngine1.add(salt);
+
+        System.out.println(" ");
+        searchEngine1.search("молоко");
+        System.out.println(" ");
+        searchEngine1.search("банан");
+    }
+
+    private static void realizationProductBasket() {
         ProductBasket basket1 = new ProductBasket();
 
         System.out.println("Заполнение корзины");
