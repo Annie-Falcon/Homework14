@@ -2,48 +2,43 @@ package org.skypro.skyshop.search;
 
 import org.skypro.skyshop.exeptions.BestResultNotFound;
 
-import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class SearchEngine {
-    private final Searchable[] listSearch;
+    private final LinkedList<Searchable> listSearch;
 
-    public SearchEngine(int size) {
-        this.listSearch = new Searchable[size];
+    public SearchEngine() {
+        this.listSearch = new LinkedList<>();
+
     }
 
     public void add(Searchable searchable) {
-        boolean listFull = true;
-        for (int i = 0; i < listSearch.length; i++) {
-            if (listSearch[i] == null) {
-                listSearch[i] = searchable;
-                listFull = false;
-                break;
-            }
-        }
-        if (listFull) {
-            System.out.println("Невозможно добавить " + searchable.getNameSearchable() + ". Список поиска полон!");
-        } else {
+        if (searchable != null) {
+            listSearch.add(searchable);
             System.out.println(searchable.getSearchTerm());
         }
     }
 
     public void search(String searchString) {
-        String[] listResult = new String[5];
-        int i = 0;
-        for (Searchable searchable : listSearch) {
-            if (searchable != null && searchable.getSearchTerm().contains(searchString)) {
-                listResult[i] = searchable.getStringRepresentation();
-                i++;
+        if (searchString == null || searchString.isBlank()) {
+            System.out.println("Запущен поиск пустой строки!");
+        } else {
+            List<String> listResult = new LinkedList<>();
+            for (Searchable searchable : listSearch) {
+                if (searchable != null && searchable.getSearchTerm().contains(searchString)) {
+                    listResult.add(searchable.getStringRepresentation());
+                }
             }
-            if (i >= 5) {
-                break;
-            }
+            System.out.println("Результат поиска: '" + searchString + "'");
+            System.out.println(listResult);
         }
-        System.out.println("Результат поиска: '" + searchString + "'");
-        System.out.println(Arrays.toString(listResult));
     }
 
     public Searchable searchMaxCoincidence(String searchString) throws BestResultNotFound {
+        if (searchString == null || searchString.isBlank()) {
+            throw new IllegalArgumentException("Запущен поиск пустой строки!");
+        }
         int indexMax = -1;
         int countCoincidenceMax = 0;
         int i = 0;
@@ -71,7 +66,7 @@ public class SearchEngine {
         if (indexMax == -1) {
             throw new BestResultNotFound(searchString);
         }
-        return listSearch[indexMax];
+        return listSearch.get(indexMax);
     }
 
 
