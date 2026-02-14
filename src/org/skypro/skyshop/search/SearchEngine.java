@@ -1,6 +1,7 @@
 package org.skypro.skyshop.search;
 
 import org.skypro.skyshop.exeptions.BestResultNotFound;
+import org.skypro.skyshop.product.Product;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,19 +21,18 @@ public class SearchEngine {
         }
     }
 
-    public void search(String searchString) {
+    public List<String> search(String searchString) {
+        List<String> listResult = new LinkedList<>();
         if (searchString == null || searchString.isBlank()) {
             System.out.println("Запущен поиск пустой строки!");
         } else {
-            List<String> listResult = new LinkedList<>();
             for (Searchable searchable : listSearch) {
                 if (searchable != null && searchable.getSearchTerm().contains(searchString)) {
                     listResult.add(searchable.getStringRepresentation());
                 }
             }
-            System.out.println("Результат поиска: '" + searchString + "'");
-            System.out.println(listResult);
         }
+        return listResult;
     }
 
     public Searchable searchMaxCoincidence(String searchString) throws BestResultNotFound {

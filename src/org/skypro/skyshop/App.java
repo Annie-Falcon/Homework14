@@ -100,10 +100,15 @@ public class App {
         searchEngine1.add(arApple);
         searchEngine1.add(salt);
 
+        getSearch(searchEngine1, "молоко");
+        getSearch(searchEngine1, " ");
+        getSearch(searchEngine1, "банан");
+    }
+
+    public static void getSearch(SearchEngine searchEngine, String searchString) {
         System.out.println(" ");
-        searchEngine1.search("молоко");
-        System.out.println(" ");
-        searchEngine1.search("банан");
+        System.out.println("Результат поиска: '" + searchString + "'");
+        System.out.println(searchEngine.search(searchString));
     }
 
     private static void realizationException() {
