@@ -2,29 +2,21 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
 
-import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ProductBasket {
-    private final Product[] basket;
+    public LinkedList<Product> basket;
 
     public ProductBasket() {
-        this.basket = new Product[5];
+        this.basket = new LinkedList<>();
     }
 
     // Метод добавления продукта в корзину
     public void addProduct(Product product) {
-        boolean basketFull = true;
-        for (int i = 0; i < basket.length; i++) {
-            if (basket[i] == null) {
-                basket[i] = product;
-                basketFull = false;
-                break;
-            }
-        }
-        if (basketFull) {
-            System.out.println("Невозможно добавить продукт " + product.getName() + ". Корзина переполнена!");
-        } else {
-            System.out.println(product.getName() + " добавлен в корзину.");
+        if (product != null) {
+            basket.add(product);
         }
     }
 
@@ -47,13 +39,13 @@ public class ProductBasket {
             if (product == null || !product.isSpecial()) {
                 continue;
             }
-            total ++;
+            total++;
         }
         return total;
     }
 
     // Проверка пустой корзины
-    private boolean isEmptyBasket() {
+    public boolean isEmptyBasket() {
         for (Product product : basket) {
             if (product != null) {
                 return false;
@@ -92,8 +84,26 @@ public class ProductBasket {
 
     // Метод очистки корзины
     public void clearBasket() {
-        Arrays.fill(basket, null);
+        basket.clear();
         System.out.println("Корзина очищена");
+    }
+
+    // Метод удаления продукта по имени из корзины
+    public List<Product> removeByName(String name) {
+        List<Product> listRemove = new LinkedList<>();
+        if (name == null || name.isBlank()) {
+            System.out.println("Название удаляемого продукта не должно быть пустым или состоять из пробелов!");
+        } else {
+            Iterator<Product> copyBasket = basket.iterator();
+            while (copyBasket.hasNext()) {
+                Product element = copyBasket.next();
+                if (element.getName().equals(name)) {
+                    listRemove.add(element);
+                    copyBasket.remove();
+                }
+            }
+        }
+        return listRemove;
     }
 
 }
