@@ -89,15 +89,25 @@ public class ProductBasket {
         if (name == null || name.isBlank()) {
             System.out.println("Название удаляемого продукта не должно быть пустым или состоять из пробелов!");
         } else {
-            basket.entrySet().removeIf(entry -> {
+           /* basket.entrySet().removeIf(entry -> {
                 if (entry.getKey().equalsIgnoreCase(name)) {
                     listRemove.addAll(entry.getValue());
                     return true;
                 } else {
                     return false;
                 }
-            });
+            });*/
 
+            if (basket.containsKey(name)) {
+                for (Map.Entry<String, List<Product>> basket : basket.entrySet()) {
+                    for (Product product : basket.getValue()) {
+                        if (product.getName().equalsIgnoreCase(name)) {
+                            listRemove.add(product);
+                        }
+                    }
+                }
+                basket.remove(name);
+            }
         }
         return listRemove;
     }

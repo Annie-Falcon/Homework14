@@ -111,8 +111,9 @@ public class App {
         System.out.println(" ");
         System.out.println("Результат поиска: '" + searchString + "'");
         TreeMap<String, Searchable> listResult = searchEngine.search(searchString);
-        for (Map.Entry<String, Searchable> searchResult : listResult.entrySet()) {
-            System.out.println(searchResult.getKey() + ": " + searchResult.getValue());
+
+        for (Searchable searchResult : listResult.values()) {
+            System.out.println(searchResult);
         }
     }
 
