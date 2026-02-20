@@ -3,8 +3,7 @@ package org.skypro.skyshop.search;
 import org.skypro.skyshop.exeptions.BestResultNotFound;
 import org.skypro.skyshop.product.Product;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class SearchEngine {
     private final LinkedList<Searchable> listSearch;
@@ -21,14 +20,14 @@ public class SearchEngine {
         }
     }
 
-    public List<String> search(String searchString) {
-        List<String> listResult = new LinkedList<>();
+    public TreeMap<String, Searchable> search(String searchString) {
+        TreeMap<String, Searchable> listResult = new TreeMap<>();
         if (searchString == null || searchString.isBlank()) {
             System.out.println("Запущен поиск пустой строки!");
         } else {
             for (Searchable searchable : listSearch) {
                 if (searchable != null && searchable.getSearchTerm().contains(searchString)) {
-                    listResult.add(searchable.getStringRepresentation());
+                    listResult.put(searchable.getNameSearchable(), searchable);
                 }
             }
         }
