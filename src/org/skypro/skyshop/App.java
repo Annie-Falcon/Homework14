@@ -11,6 +11,8 @@ import org.skypro.skyshop.search.SearchEngine;
 import org.skypro.skyshop.search.Searchable;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class App {
     public static FixPriceProduct bread = new FixPriceProduct("хлеб");
@@ -51,7 +53,7 @@ public class App {
 
         basket1.printBasket();
         System.out.println("Наличие кофе в корзине: " + basket1.isProductInBasket("кофе"));
-        System.out.println("Наличие соли в корзине: " + basket1.isProductInBasket("вишня"));
+        System.out.println("Наличие вишни в корзине: " + basket1.isProductInBasket("вишня"));
 
         deleteProductFromBasket(basket1, "хлеб");
         deleteProductFromBasket(basket1, "вишня");
@@ -108,7 +110,11 @@ public class App {
     public static void getSearch(SearchEngine searchEngine, String searchString) {
         System.out.println(" ");
         System.out.println("Результат поиска: '" + searchString + "'");
-        System.out.println(searchEngine.search(searchString));
+        TreeMap<String, Searchable> listResult = searchEngine.search(searchString);
+
+        for (Searchable searchResult : listResult.values()) {
+            System.out.println(searchResult);
+        }
     }
 
     private static void realizationException() {

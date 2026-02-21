@@ -2,32 +2,29 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class ProductBasket {
-    public LinkedList<Product> basket;
+    public HashMap<String, List<Product>> basket;
 
     public ProductBasket() {
-        this.basket = new LinkedList<>();
+        this.basket = new HashMap<>();
     }
 
     // Метод добавления продукта в корзину
     public void addProduct(Product product) {
         if (product != null) {
-            basket.add(product);
+            basket.computeIfAbsent(product.getName(), k -> new ArrayList<>()).add(product);
         }
     }
 
     // Метод получения общей стоимости корзины
     public int getTotalPrice() {
         int total = 0;
-        for (Product product : basket) {
-            if (product == null) {
-                continue;
+        for (Map.Entry<String, List<Product>> basketKey : basket.entrySet()) {
+            for (Product product : basketKey.getValue()) {
+                total += product.getPrice();
             }
-            total += product.getPrice();
         }
         return total;
     }
@@ -35,23 +32,19 @@ public class ProductBasket {
     // Метод получения количества специальных товаров
     public int getSpecialProduct() {
         int total = 0;
-        for (Product product : basket) {
-            if (product == null || !product.isSpecial()) {
-                continue;
+        for (Map.Entry<String, List<Product>> basketKey : basket.entrySet()) {
+            for (Product product : basketKey.getValue()) {
+                if (product.isSpecial()) {
+                    total++;
+                }
             }
-            total++;
         }
         return total;
     }
 
     // Проверка пустой корзины
     public boolean isEmptyBasket() {
-        for (Product product : basket) {
-            if (product != null) {
-                return false;
-            }
-        }
-        return true;
+        return (basket == null || basket.isEmpty());
     }
 
     // Метод, который печатает содержимое корзины
@@ -60,8 +53,8 @@ public class ProductBasket {
             System.out.println("В корзине пусто");
         } else {
             System.out.println("Корзина:");
-            for (Product product : basket) {
-                if (product != null) {
+            for (Map.Entry<String, List<Product>> basket : basket.entrySet()) {
+                for (Product product : basket.getValue()) {
                     System.out.println(product);
                 }
             }
@@ -72,10 +65,12 @@ public class ProductBasket {
 
     // Метод, проверяющий продукт в корзине по имени
     public boolean isProductInBasket(String productName) {
-        if (!(isEmptyBasket())) {
-            for (Product product : basket) {
-                if (product.getName().equalsIgnoreCase(productName)) {
-                    return true;
+        if (!(isEmptyBasket() || productName.isBlank())) {
+            for (Map.Entry<String, List<Product>> basket : basket.entrySet()) {
+                for (Product product : basket.getValue()) {
+                    if (product.getName().equalsIgnoreCase(productName)) {
+                        return true;
+                    }
                 }
             }
         }
@@ -94,16 +89,26 @@ public class ProductBasket {
         if (name == null || name.isBlank()) {
             System.out.println("Название удаляемого продукта не должно быть пустым или состоять из пробелов!");
         } else {
-            Iterator<Product> copyBasket = basket.iterator();
-            while (copyBasket.hasNext()) {
-                Product element = copyBasket.next();
-                if (element.getName().equals(name)) {
-                    listRemove.add(element);
-                    copyBasket.remove();
+           /* basket.entrySet().removeIf(entry -> {
+                if (entry.getKey().equalsIgnoreCase(name)) {
+                    listRemove.addAll(entry.getValue());
+                    return true;
+                } else {
+                    return false;
                 }
+            });*/
+
+            if (basket.containsKey(name)) {
+                for (Map.Entry<String, List<Product>> basket : basket.entrySet()) {
+                    for (Product product : basket.getValue()) {
+                        if (product.getName().equalsIgnoreCase(name)) {
+                            listRemove.add(product);
+                        }
+                    }
+                }
+                basket.remove(name);
             }
         }
         return listRemove;
     }
-
 }
