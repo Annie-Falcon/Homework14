@@ -6,11 +6,10 @@ import org.skypro.skyshop.product.Product;
 import java.util.*;
 
 public class SearchEngine {
-    private final LinkedList<Searchable> listSearch;
+    private final Set<Searchable> listSearch;
 
     public SearchEngine() {
-        this.listSearch = new LinkedList<>();
-
+        this.listSearch = new HashSet<>();
     }
 
     public void add(Searchable searchable) {
@@ -20,14 +19,24 @@ public class SearchEngine {
         }
     }
 
-    public TreeMap<String, Searchable> search(String searchString) {
-        TreeMap<String, Searchable> listResult = new TreeMap<>();
+    public TreeSet<Searchable> search(String searchString) {
+        TreeSet<Searchable> listResult = new TreeSet<>(new Comparator<Searchable>() {
+            @Override
+            public int compare(Searchable o1, Searchable o2) {
+                int result = Integer.compare(o1.getNameSearchable().length(), o2.getNameSearchable().length());
+                if (result == 0) {
+                    result = o1.getNameSearchable().compareTo(o2.getNameSearchable());
+                }
+                return result;
+            }
+        });
+
         if (searchString == null || searchString.isBlank()) {
             System.out.println("Запущен поиск пустой строки!");
         } else {
             for (Searchable searchable : listSearch) {
                 if (searchable != null && searchable.getSearchTerm().contains(searchString)) {
-                    listResult.put(searchable.getNameSearchable(), searchable);
+                    listResult.add(searchable);
                 }
             }
         }
@@ -38,7 +47,7 @@ public class SearchEngine {
         if (searchString == null || searchString.isBlank()) {
             throw new IllegalArgumentException("Запущен поиск пустой строки!");
         }
-        int indexMax = -1;
+        Searchable maxSearchable = null;
         int countCoincidenceMax = 0;
         int i = 0;
         int indexBeg;
@@ -57,15 +66,15 @@ public class SearchEngine {
                 }
                 if (countCoincidence > countCoincidenceMax) {
                     countCoincidenceMax = countCoincidence;
-                    indexMax = i;
+                    maxSearchable = searchable;
                 }
             }
             i++;
         }
-        if (indexMax == -1) {
+        if (maxSearchable == null) {
             throw new BestResultNotFound(searchString);
         }
-        return listSearch.get(indexMax);
+        return maxSearchable;
     }
 
 

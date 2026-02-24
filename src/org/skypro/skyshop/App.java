@@ -10,9 +10,7 @@ import org.skypro.skyshop.product.FixPriceProduct;
 import org.skypro.skyshop.search.SearchEngine;
 import org.skypro.skyshop.search.Searchable;
 
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class App {
     public static FixPriceProduct bread = new FixPriceProduct("хлеб");
@@ -25,7 +23,7 @@ public class App {
     public static DiscountedProduct breadD = new DiscountedProduct("хлеб", 64, 35);
 
     public static Article arBread = new Article("Полезный хлеб", "хлеб подходит к напиткам: кофе, молоко");
-    public static Article arMilk = new Article("Завтрак с молоком", "Смузи - в молоко добавьте: банан, яблоко; подавайте к кофе с молоком");
+    public static Article arMilk = new Article("Завтрак с молоком!", "Смузи - в молоко добавьте: банан, яблоко; подавайте к кофе с молоком");
     public static Article arCoffee = new Article("Рецепт кофе с молоком", "Добавьте: в кофе молоко");
     public static Article arBanana = new Article("Ищите банан", "Увидите яблоко - где-то рядом банан. Не забудьте молоко");
     public static Article arApple = new Article("Богатырское яблоко", "Полезнее, чем банан. Для смузи используйте кефир, не молоко");
@@ -110,9 +108,9 @@ public class App {
     public static void getSearch(SearchEngine searchEngine, String searchString) {
         System.out.println(" ");
         System.out.println("Результат поиска: '" + searchString + "'");
-        TreeMap<String, Searchable> listResult = searchEngine.search(searchString);
+        TreeSet<Searchable> listResult = searchEngine.search(searchString);
 
-        for (Searchable searchResult : listResult.values()) {
+        for (Searchable searchResult : listResult) {
             System.out.println(searchResult);
         }
     }
