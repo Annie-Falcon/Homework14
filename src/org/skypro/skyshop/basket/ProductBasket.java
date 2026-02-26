@@ -20,26 +20,20 @@ public class ProductBasket {
 
     // Метод получения общей стоимости корзины
     public int getTotalPrice() {
-        int total = 0;
-        for (Map.Entry<String, List<Product>> basketKey : basket.entrySet()) {
-            for (Product product : basketKey.getValue()) {
-                total += product.getPrice();
-            }
-        }
-        return total;
+        return basket.values()
+                .stream()
+                .flatMap(Collection::stream)
+                .mapToInt(Product::getPrice)
+                .sum();
     }
 
     // Метод получения количества специальных товаров
     public int getSpecialProduct() {
-        int total = 0;
-        for (Map.Entry<String, List<Product>> basketKey : basket.entrySet()) {
-            for (Product product : basketKey.getValue()) {
-                if (product.isSpecial()) {
-                    total++;
-                }
-            }
-        }
-        return total;
+        return (int) basket.values()
+                .stream()
+                .flatMap(Collection::stream)
+                .filter(Product::isSpecial)
+                .count();
     }
 
     // Проверка пустой корзины
@@ -53,11 +47,12 @@ public class ProductBasket {
             System.out.println("В корзине пусто");
         } else {
             System.out.println("Корзина:");
-            for (Map.Entry<String, List<Product>> basket : basket.entrySet()) {
-                for (Product product : basket.getValue()) {
-                    System.out.println(product);
-                }
-            }
+
+            basket.values()
+                    .stream()
+                    .flatMap(Collection::stream)
+                    .forEach(System.out::println);
+
             System.out.println("Итого:" + getTotalPrice() + " руб.");
             System.out.println("Специальных товаров:" + getSpecialProduct() + " руб.");
         }
@@ -66,13 +61,11 @@ public class ProductBasket {
     // Метод, проверяющий продукт в корзине по имени
     public boolean isProductInBasket(String productName) {
         if (!(isEmptyBasket() || productName.isBlank())) {
-            for (Map.Entry<String, List<Product>> basket : basket.entrySet()) {
-                for (Product product : basket.getValue()) {
-                    if (product.getName().equalsIgnoreCase(productName)) {
-                        return true;
-                    }
-                }
-            }
+            return basket.values()
+                    .stream()
+                    .flatMap(Collection::stream)
+                    .map(Product::getName)
+                    .anyMatch(i -> i.equalsIgnoreCase(productName));
         }
         return false;
     }
@@ -88,26 +81,14 @@ public class ProductBasket {
         List<Product> listRemove = new LinkedList<>();
         if (name == null || name.isBlank()) {
             System.out.println("Название удаляемого продукта не должно быть пустым или состоять из пробелов!");
-        } else {
-           /* basket.entrySet().removeIf(entry -> {
-                if (entry.getKey().equalsIgnoreCase(name)) {
-                    listRemove.addAll(entry.getValue());
-                    return true;
-                } else {
-                    return false;
-                }
-            });*/
+        } else if (basket.containsKey(name)) {
+            listRemove = basket.values()
+                    .stream()
+                    .flatMap(Collection::stream)
+                    .filter(i -> i.getName().equalsIgnoreCase(name))
+                    .toList();
 
-            if (basket.containsKey(name)) {
-                for (Map.Entry<String, List<Product>> basket : basket.entrySet()) {
-                    for (Product product : basket.getValue()) {
-                        if (product.getName().equalsIgnoreCase(name)) {
-                            listRemove.add(product);
-                        }
-                    }
-                }
-                basket.remove(name);
-            }
+            basket.remove(name);
         }
         return listRemove;
     }
