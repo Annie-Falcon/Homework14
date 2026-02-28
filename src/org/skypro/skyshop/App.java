@@ -145,7 +145,7 @@ public class App {
     public static void getSearchMax(SearchEngine searchEngine, String searchString) {
         try {
             Searchable resultMax = searchEngine.searchMaxCoincidence(searchString);
-            System.out.println("Результат поиска максимального кол-ва вхождения слова '" + searchString + "': " + resultMax.getNameSearchable());
+            System.out.println("Результат поиска максимального кол-ва вхождения слова '" + searchString + "': " + resultMax.getStringRepresentation());
         } catch (BestResultNotFound e) {
             System.out.println(e.toString());
         } catch (IllegalArgumentException e) {
